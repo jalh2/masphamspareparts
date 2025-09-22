@@ -20,4 +20,7 @@ router.post('/:id/transactions', supplierController.addTransaction);
 // Reset supplier password
 router.post('/:id/reset-password', supplierController.resetSupplierPassword);
 
+// Delete supplier
+router.delete('/:id', supplierController.deleteSupplier);
+
 module.exports = router;

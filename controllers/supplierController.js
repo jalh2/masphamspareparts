@@ -181,3 +181,28 @@ exports.resetSupplierPassword = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+// Delete supplier and associated user
+exports.deleteSupplier = async (req, res) => {
+  try {
+    const supplier = await Supplier.findById(req.params.id);
+    if (!supplier) {
+      return res.status(404).json({ message: 'Supplier not found' });
+    }
+
+    const userId = supplier.user;
+
+    // Delete supplier document
+    await Supplier.deleteOne({ _id: supplier._id });
+
+    // Optionally delete associated user account
+    if (userId) {
+      await User.deleteOne({ _id: userId });
+    }
+
+    res.json({ message: 'Supplier deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting supplier:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
